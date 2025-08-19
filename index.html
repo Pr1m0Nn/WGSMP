@@ -239,33 +239,6 @@
             padding: 5px 10px;
             border-radius: 5px;
         }
-        
-        .sound-controls {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            display: flex;
-            gap: 10px;
-            z-index: 400;
-        }
-        
-        .sound-btn {
-            width: 30px;
-            height: 30px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 1px solid #555;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            color: #fff;
-            font-size: 12px;
-        }
-        
-        .sound-btn:hover {
-            background-color: rgba(50, 50, 50, 0.7);
-        }
     </style>
 </head>
 <body>
@@ -310,11 +283,6 @@
     <div id="password-screen">
         <div class="password-message">Insira a senha</div>
         <input type="password" class="password-box" id="password-input" onkeyup="checkPassword(this.value)">
-    </div>
-    
-    <div class="sound-controls">
-        <div class="sound-btn" id="toggle-ambient" title="Som ambiente">♫</div>
-        <div class="sound-btn" id="mute-all" title="Silenciar tudo">🔇</div>
     </div>
 
     <!-- Elementos de áudio -->
@@ -375,9 +343,6 @@
                 ambientSound.play().catch(e => console.log("Som ambiente não pôde ser reproduzido: ", e));
             }, 1000);
             
-            // Configurar controles de som
-            document.getElementById('toggle-ambient').addEventListener('click', toggleAmbientSound);
-            document.getElementById('mute-all').addEventListener('click', toggleMuteAll);
         });
         
         // Adicionar evento de tecla ESC
