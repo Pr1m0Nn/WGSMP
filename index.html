@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>????</title>
+    <title>Livro Misterioso</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         
@@ -75,11 +75,13 @@
             cursor: pointer;
             transition: all 0.5s ease;
             z-index: 10;
+            box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
             top: -130px;
         }
         
         .book:hover {
-            transform: translateY(-5px) scale(1.05)
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 15px rgba(200, 150, 100, 0.8);
         }
         
         .book-container {
@@ -275,7 +277,7 @@
     
     <div id="video-container">
         <video id="mystery-video" width="400" height="240" onended="showPasswordScreen()">
-            <source src="" type="video/mp4">
+            <source src="assets/video/nafestadofimdesemana.mp4" type="video/mp4">
             Seu navegador não suporta o elemento de vídeo.
         </video>
     </div>
@@ -342,7 +344,6 @@
             setTimeout(() => {
                 ambientSound.play().catch(e => console.log("Som ambiente não pôde ser reproduzido: ", e));
             }, 1000);
-            
         });
         
         // Adicionar evento de tecla ESC
@@ -413,14 +414,10 @@
             document.getElementById('video-container').style.display = 'block';
             closeBook();
             
-            // Em um cenário real, aqui você definiría a fonte do vídeo
-            // document.getElementById('mystery-video').src = "seu-video.mp4";
-            // document.getElementById('mystery-video').play();
-            
-            // Simulando o fim do vídeo após 5 segundos para demonstração
-            setTimeout(function() {
-                showPasswordScreen();
-            }, 5000);
+            // Configurar e tocar o vídeo
+            const video = document.getElementById('mystery-video');
+            video.src = "assets/video/nafestadofimdesemana.mp4";
+            video.play().catch(e => console.log("Vídeo não pôde ser reproduzido: ", e));
         }
         
         function showPasswordScreen() {
@@ -432,32 +429,6 @@
             if (password === '0413') {
                 alert('Senha correta!');
                 // Aqui você pode redirecionar ou fazer algo quando a senha estiver correta
-            }
-        }
-        
-        // Controles de áudio
-        function toggleAmbientSound() {
-            if (ambientSound.paused) {
-                ambientSound.play().catch(e => console.log("Som ambiente não pôde ser reproduzido: ", e));
-                document.getElementById('toggle-ambient').style.backgroundColor = 'rgba(0, 100, 0, 0.7)';
-            } else {
-                ambientSound.pause();
-                document.getElementById('toggle-ambient').style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-            }
-        }
-        
-        function toggleMuteAll() {
-            const isMuted = startSound.muted;
-            startSound.muted = !isMuted;
-            pageSound.muted = !isMuted;
-            ambientSound.muted = !isMuted;
-            
-            if (!isMuted) {
-                document.getElementById('mute-all').innerHTML = '🔊';
-                document.getElementById('mute-all').title = 'Ativar som';
-            } else {
-                document.getElementById('mute-all').innerHTML = '🔇';
-                document.getElementById('mute-all').title = 'Silenciar tudo';
             }
         }
     </script>
