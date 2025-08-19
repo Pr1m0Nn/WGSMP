@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livro Misterioso</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Press Start 2P', cursive;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            font-size: 10px;
+        }
+        
+        .hidden-text {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #000;
+            font-size: 8px;
+            user-select: none;
+            transition: color 0.3s;
+        }
+        
+        .hidden-text:hover {
+            color: #222;
+        }
+        
+        .altar-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 200px;
+            margin-top: 30px;
+        }
+        
+        .altar {
+            position: relative;
+            width: 150px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .altar-img {
+            width: 100%;
+            height: auto;
+            image-rendering: pixelated;
+        }
+        
+        .book {
+            position: absolute;
+            width: 70px;
+            height: 90px;
+            background-image: url('https://png.pngtree.com/png-clipart/20240719/original/pngtree-empty-book-in-pixel-art-style-png-image_15592895.png');
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
+            top: -90px;
+        }
+        
+        .book:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 15px rgba(200, 150, 100, 0.8);
+        }
+        
+        .book-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 560px;
+            height: 400px;
+            z-index: 100;
+            background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b29f8639-335a-4b8a-b6ac-3ed5cc38aebd/d11kya2-5e29b41a-e918-495b-9ff2-78089a5a87d6.gif');
+            background-size: cover;
+            background-position: center;
+            padding: 30px;
+            image-rendering: pixelated;
+        }
+        
+        .left-page, .right-page {
+            width: 48%;
+            height: 90%;
+            padding: 20px;
+            color: #3a2c15;
+            overflow-y: auto;
+            font-size: 8px;
+            line-height: 1.6;
+            position: absolute;
+            top: 5%;
+        }
+        
+        .left-page {
+            left: 4%;
+            text-align: left;
+        }
+        
+        .right-page {
+            right: 4%;
+            text-align: left;
+        }
+        
+        .page-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            color: #8b5a2b;
+            z-index: 110;
+        }
+        
+        .page-image {
+            width: 100%;
+            height: auto;
+            margin: 10px 0;
+            border: none;
+            image-rendering: pixelated;
+        }
+        
+        .verse-link {
+            color: #7a5c29;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        .verse-link:hover {
+            color: #a57c3f;
+        }
+        
+        #video-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            background: #000;
+            padding: 5px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        #password-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 300;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .password-box {
+            width: 200px;
+            height: 40px;
+            border: 2px solid #fff;
+            background: transparent;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            z-index: 310;
+            margin-top: 15px;
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        .password-message {
+            color: #fff;
+            font-size: 12px;
+            margin-bottom: 10px;
+            z-index: 310;
+            text-align: center;
+        }
+        
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            color: #5a4425;
+            cursor: pointer;
+            z-index: 110;
+            user-select: none;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+        
+        .nav-arrow:hover {
+            color: #a57c3f;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .arrow-left {
+            left: 30px;
+        }
+        
+        .arrow-right {
+            right: 30px;
+        }
+        
+        .esc-hint {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #555;
+            font-size: 8px;
+            z-index: 110;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .sound-controls {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 400;
+        }
+        
+        .sound-btn {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #555;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: #fff;
+            font-size: 12px;
+        }
+        
+        .sound-btn:hover {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="hidden-text">texto super foda que eu ainda nao tive ideia do que por, depois resolvo isso.</div>
+    
+    <div class="altar-container">
+        <div class="altar">
+            <img class="altar-img" src="https://art.pixilart.com/thumb/sr2dd55f2f8b9f7.png" alt="Altar">
+            <div class="book" id="book"></div>
+        </div>
+    </div>
+
+    <!-- Container do livro com duas páginas -->
+    <div class="book-container" id="book-container">
+        <span class="close-btn" onclick="closeBook()">×</span>
+        
+        <div class="left-page">
+            <div class="page-content" id="left-content">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+        </div>
+        
+        <div class="right-page">
+            <div class="page-content" id="right-content">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav-arrow arrow-left" onclick="prevPage()" style="display: none;">❮</div>
+    <div class="nav-arrow arrow-right" onclick="nextPage()" style="display: none;">❯</div>
+    
+    <div class="esc-hint" id="esc-hint" style="display: none;">Pressione ESC para fechar</div>
+    
+    <div id="video-container">
+        <video id="mystery-video" width="400" height="240" onended="showPasswordScreen()">
+            <source src="" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+    </div>
+    
+    <div id="password-screen">
+        <div class="password-message">Insira a senha</div>
+        <input type="password" class="password-box" id="password-input" onkeyup="checkPassword(this.value)">
+    </div>
+    
+    <div class="sound-controls">
+        <div class="sound-btn" id="toggle-ambient" title="Som ambiente">♫</div>
+        <div class="sound-btn" id="mute-all" title="Silenciar tudo">🔇</div>
+    </div>
+
+    <!-- Elementos de áudio -->
+    <audio id="start-sound" src="assets/audio/inicio.mp3" preload="auto"></audio>
+    <audio id="page-sound" src="assets/audio/folhear.mp3" preload="auto"></audio>
+    <audio id="ambient-sound" src="assets/audio/ambiente.mp3" loop preload="auto"></audio>
+
+    <script>
+        let currentPage = 0;
+        const totalPages = 5; // Agora temos 5 pares de páginas
+        
+        // Elementos de áudio
+        const startSound = document.getElementById('start-sound');
+        const pageSound = document.getElementById('page-sound');
+        const ambientSound = document.getElementById('ambient-sound');
+        
+        // Conteúdo das páginas
+        const pageContents = [
+            { // Página 1 (esquerda) e 2 (direita)
+                left: `<h2>Página 1</h2>
+                <img class="page-image" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'><rect x='0' y='0' width='200' height='120' fill='%23f5e8c8' opacity='0.5'/><circle cx='100' cy='60' r='40' fill='%23d4b483' opacity='0.7'/></svg>" alt="Símbolo">`,
+                right: `<h2>Página 2</h2>
+                <p>um versiculo aqui, to sem ele no momento <span class="verse-link" onclick="redirectToPage('pagina-um')">1</span>.</p>`
+            },
+            { // Página 3 (esquerda) e 4 (direita)
+                left: `<h2>Página 3</h2>
+                <p>olha, aqui pode estar rabiscado informações sobre bicho, sla</p>`,
+                right: `<h2>Página 4</h2>
+                <img class="page-image" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'><rect x='0' y='0' width='200' height='120' fill='%23f5e8c8' opacity='0.5'/><polygon points='100,30 150,150 50,150' fill='%23d4b483' opacity='0.7'/></svg>" alt="Símbolo">`
+            },
+            { // Página 5 (esquerda) e 6 (direita)
+                left: `<h2>Página 5</h2>
+                <p>olha, aqui pode estar rabiscado informações sobre bicho, sla</p>`,
+                right: `<h2>Página 6</h2>
+                <p>um versiculo aqui, to sem ele no momento <span class="verse-link" onclick="redirectToPage('pagina-dois')">2</span>.</p>`
+            },
+            { // Página 7 (esquerda) and 8 (direita)
+                left: `<h2>Página 7</h2>
+                <p>olha, aqui pode estar rabiscado informações sobre bicho, sla</p>`,
+                right: `<h2>Página 8</h2>
+                <p>um versiculo aqui, to sem ele no momento <span class="verse-link" onclick="redirectToPage('pagina-tres')">3</span>.</p>`
+            },
+            { // Página 9 (esquerda) e 10 (direita)
+                left: `<h2>Página 9</h2>
+                <p>olha, aqui pode estar rabiscado informações sobre bicho, sla</p>`,
+                right: `<h2>Página 10</h2>
+                <img class="page-image clickable-image" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'><rect x='0' y='0' width='200' height='120' fill='%23f5e8c8' opacity='0.5'/><path d='M100,45 Q150,60 150,105 T100,165 T50,105 T100,45' fill='%23d4b483' opacity='0.7'/></svg>" alt="Símbolo" onclick="playVideo()">`
+            }
+        ];
+        
+        // Inicialização quando a página carrega
+        window.addEventListener('load', function() {
+            // Tocar som de início
+            startSound.play().catch(e => console.log("Som de início não pôde ser reproduzido: ", e));
+            
+            // Iniciar som ambiente
+            setTimeout(() => {
+                ambientSound.play().catch(e => console.log("Som ambiente não pôde ser reproduzido: ", e));
+            }, 1000);
+            
+            // Configurar controles de som
+            document.getElementById('toggle-ambient').addEventListener('click', toggleAmbientSound);
+            document.getElementById('mute-all').addEventListener('click', toggleMuteAll);
+        });
+        
+        // Adicionar evento de tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeBook();
+                document.getElementById('video-container').style.display = 'none';
+            }
+        });
+        
+        // Inicializar
+        document.getElementById('book').addEventListener('click', function() {
+            currentPage = 0;
+            openBook();
+        });
+        
+        function openBook() {
+            document.getElementById('book-container').style.display = 'block';
+            document.querySelector('.arrow-left').style.display = 'block';
+            document.querySelector('.arrow-right').style.display = 'block';
+            document.getElementById('esc-hint').style.display = 'block';
+            showPages();
+        }
+        
+        function closeBook() {
+            document.getElementById('book-container').style.display = 'none';
+            document.querySelector('.arrow-left').style.display = 'none';
+            document.querySelector('.arrow-right').style.display = 'none';
+            document.getElementById('esc-hint').style.display = 'none';
+        }
+        
+        function showPages() {
+            // Página esquerda
+            const leftContent = document.getElementById('left-content');
+            leftContent.innerHTML = pageContents[currentPage].left;
+            
+            // Página direita
+            const rightContent = document.getElementById('right-content');
+            rightContent.innerHTML = pageContents[currentPage].right;
+        }
+        
+        function nextPage() {
+            if (currentPage + 1 < pageContents.length) {
+                currentPage += 1;
+                showPages();
+                // Tocar som de virar página
+                pageSound.currentTime = 0;
+                pageSound.play().catch(e => console.log("Som de página não pôde ser reproduzido: ", e));
+            }
+        }
+        
+        function prevPage() {
+            if (currentPage - 1 >= 0) {
+                currentPage -= 1;
+                showPages();
+                // Tocar som de virar página
+                pageSound.currentTime = 0;
+                pageSound.play().catch(e => console.log("Som de página não pôde ser reproduzido: ", e));
+            }
+        }
+        
+        function redirectToPage(page) {
+            alert(`Redirecionando para ${page}`);
+            // Aqui você pode usar window.location.href para redirecionar para páginas reais
+        }
+        
+        function playVideo() {
+            document.getElementById('video-container').style.display = 'block';
+            closeBook();
+            
+            // Em um cenário real, aqui você definiría a fonte do vídeo
+            // document.getElementById('mystery-video').src = "seu-video.mp4";
+            // document.getElementById('mystery-video').play();
+            
+            // Simulando o fim do vídeo após 5 segundos para demonstração
+            setTimeout(function() {
+                showPasswordScreen();
+            }, 5000);
+        }
+        
+        function showPasswordScreen() {
+            document.getElementById('video-container').style.display = 'none';
+            document.getElementById('password-screen').style.display = 'flex';
+        }
+        
+        function checkPassword(password) {
+            if (password === '0413') {
+                alert('Senha correta!');
+                // Aqui você pode redirecionar ou fazer algo quando a senha estiver correta
+            }
+        }
+        
+        // Controles de áudio
+        function toggleAmbientSound() {
+            if (ambientSound.paused) {
+                ambientSound.play().catch(e => console.log("Som ambiente não pôde ser reproduzido: ", e));
+                document.getElementById('toggle-ambient').style.backgroundColor = 'rgba(0, 100, 0, 0.7)';
+            } else {
+                ambientSound.pause();
+                document.getElementById('toggle-ambient').style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            }
+        }
+        
+        function toggleMuteAll() {
+            const isMuted = startSound.muted;
+            startSound.muted = !isMuted;
+            pageSound.muted = !isMuted;
+            ambientSound.muted = !isMuted;
+            
+            if (!isMuted) {
+                document.getElementById('mute-all').innerHTML = '🔊';
+                document.getElementById('mute-all').title = 'Ativar som';
+            } else {
+                document.getElementById('mute-all').innerHTML = '🔇';
+                document.getElementById('mute-all').title = 'Silenciar tudo';
+            }
+        }
+    </script>
+</body>
+</html>
