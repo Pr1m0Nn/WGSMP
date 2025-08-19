@@ -75,13 +75,11 @@
             cursor: pointer;
             transition: all 0.5s ease;
             z-index: 10;
-            box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
             top: -130px;
         }
         
         .book:hover {
             transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 0 15px rgba(200, 150, 100, 0.8);
         }
         
         .book-container {
@@ -110,6 +108,11 @@
             line-height: 1.6;
             position: absolute;
             top: 5%;
+            /* Adicionado fundo bege para as páginas */
+            background-color: #f5e8c8;
+            border: 2px solid #d4b483;
+            border-radius: 5px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
         }
         
         .left-page {
